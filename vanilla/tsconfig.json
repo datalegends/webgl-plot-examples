@@ -2,9 +2,11 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
+    "allowJs": true,
     "moduleResolution": "node",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "downlevelIteration": true,
     "sourceMap": true,
     "typeRoots": ["node_modules/@types", "@types"],
@@ -13,6 +15,7 @@
   },
   "include": [
     "src",
+    "src/**/*.js",
     "types"
-,  ]
+  ]
 }

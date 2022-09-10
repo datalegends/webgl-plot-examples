@@ -19,13 +19,23 @@
   "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
   "dependencies": {
     "@danchitnis/simple-slider": "^0.2.0",
+    "@protobuf-ts/runtime": "^2.8.0",
     "@types/nouislider": "^15.0.0",
+    "@types/pbf": "^3.0.2",
     "@types/stats.js": "^0.17.0",
     "nouislider": "^15.6.0",
+    "pbf": "^3.2.1",
     "stats.js": "^0.17.0",
+    "ts-proto": "^1.122.0",
+    "tsconfig-paths": "^4.1.0",
+    "typescript-bundle": "^1.0.18",
     "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
+    "@protobuf-ts/plugin": "^2.8.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.4",
+    "@types/node": "^18.7.9",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "eslint": "^8.18.0",
