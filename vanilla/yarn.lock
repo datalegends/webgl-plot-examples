@@ -209,9 +209,9 @@
     "resolve" "^1.19.0"
 
 "@rollup/plugin-typescript@^8.3.4":
-  "integrity" "sha512-wt7JnYE9antX6BOXtsxGoeVSu4dZfw0dU3xykfOQ4hC3EddxRbVG/K0xiY1Wup7QOHJcjLYXWAn0Kx9Z1SBHHg=="
-  "resolved" "https://registry.npmjs.org/@rollup/plugin-typescript/-/plugin-typescript-8.3.4.tgz"
-  "version" "8.3.4"
+  "integrity" "sha512-wMv1/scv0m/rXx21wD2IsBbJFba8wGF3ErJIr6IKRfRj49S85Lszbxb4DCo8iILpluTjk2GAAu9CoZt4G3ppgQ=="
+  "resolved" "https://registry.npmjs.org/@rollup/plugin-typescript/-/plugin-typescript-8.5.0.tgz"
+  "version" "8.5.0"
   dependencies:
     "@rollup/pluginutils" "^3.1.0"
     "resolve" "^1.17.0"
@@ -275,9 +275,9 @@
   "version" "4.0.2"
 
 "@types/node@*", "@types/node@^18.7.9", "@types/node@>=10.0.0", "@types/node@>=13.7.0":
-  "integrity" "sha512-0N5Y1XAdcl865nDdjbO0m3T6FdmQ4ijE89/urOHLREyTXbpMWbSafx9y7XIsgWGtwUP2iYTinLyyW3FatAxBLQ=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-18.7.9.tgz"
-  "version" "18.7.9"
+  "integrity" "sha512-EQHhixfu+mkqHMZl1R2Ovuvn47PUw18azMJOTwSZr9/fhzHNGXAJ0ma0dayRVchprpCj0Kc1K1xKoWaATWF1qg=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-18.7.16.tgz"
+  "version" "18.7.16"
 
 "@types/nouislider@^15.0.0":
   "integrity" "sha512-CgBRRaaoR09F+yIp3y222atrs8+e2fDv0sFJmhhgJP9fvKfoZsKHX10oBMe/Y3toZ4obIY+CMirfGeli+aoKwg=="
@@ -745,6 +745,11 @@
   "resolved" "https://registry.npmjs.org/deepmerge/-/deepmerge-4.2.2.tgz"
   "version" "4.2.2"
 
+"detect-libc@^1.0.3":
+  "integrity" "sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg=="
+  "resolved" "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz"
+  "version" "1.0.3"
+
 "dir-glob@^3.0.1":
   "integrity" "sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA=="
   "resolved" "https://registry.npmjs.org/dir-glob/-/dir-glob-3.0.1.tgz"
@@ -758,6 +763,13 @@
   "version" "3.0.0"
   dependencies:
     "esutils" "^2.0.2"
+
+"dprint-node@^1.0.7":
+  "integrity" "sha512-NTZOW9A7ipb0n7z7nC3wftvsbceircwVHSgzobJsEQa+7RnOMbhrfX5IflA6CtC4GA63DSAiHYXa4JKEy9F7cA=="
+  "resolved" "https://registry.npmjs.org/dprint-node/-/dprint-node-1.0.7.tgz"
+  "version" "1.0.7"
+  dependencies:
+    "detect-libc" "^1.0.3"
 
 "electron-to-chromium@^1.4.202":
   "integrity" "sha512-diMr4t69FigAGUk2KovP0bygEtN/9AkqEVkzjEp0cu+zFFbZMVvwACpTTfuj1mAmFR5kNoSW8wGKDFWIvmThiQ=="
@@ -1310,11 +1322,6 @@
   "resolved" "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   "version" "4.6.2"
 
-"lodash@^4.17.15":
-  "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
-  "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
-  "version" "4.17.21"
-
 "long@^4.0.0":
   "integrity" "sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA=="
   "resolved" "https://registry.npmjs.org/long/-/long-4.0.0.tgz"
@@ -1526,11 +1533,6 @@
   "integrity" "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   "version" "1.2.1"
-
-"prettier@^2.5.1":
-  "integrity" "sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g=="
-  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
-  "version" "2.7.1"
 
 "protobufjs@^6.11.3", "protobufjs@^6.8.8":
   "integrity" "sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg=="
@@ -1854,13 +1856,12 @@
   dependencies:
     "is-number" "^7.0.0"
 
-"ts-poet@^4.15.0":
-  "integrity" "sha512-sLLR8yQBvHzi9d4R1F4pd+AzQxBfzOSSjfxiJxQhkUoH5bL7RsAC6wgvtVUQdGqiCsyS9rT6/8X2FI7ipdir5g=="
-  "resolved" "https://registry.npmjs.org/ts-poet/-/ts-poet-4.15.0.tgz"
-  "version" "4.15.0"
+"ts-poet@^6.1.0":
+  "integrity" "sha512-PFwbNJjGrb44wzHUGQicG2/nhjR+3+k7zYLDTa8D61NVUitl7K/JgIc9/P+8oMNenntKzLc8tjLDOkPrxIhm6A=="
+  "resolved" "https://registry.npmjs.org/ts-poet/-/ts-poet-6.1.0.tgz"
+  "version" "6.1.0"
   dependencies:
-    "lodash" "^4.17.15"
-    "prettier" "^2.5.1"
+    "dprint-node" "^1.0.7"
 
 "ts-proto-descriptors@1.7.1":
   "integrity" "sha512-oIKUh3K4Xts4v29USGLfUG+2mEk32MsqpgZAOUyUlkrcIdv34yE+k2oZ2Nzngm6cV/JgFdOxRCqeyvmWHuYAyw=="
@@ -1871,15 +1872,15 @@
     "protobufjs" "^6.8.8"
 
 "ts-proto@^1.122.0":
-  "integrity" "sha512-TmPKmSxRJjnfrdyncOMfilJDXvyL0BGxM4nDyYgMDVT2EhYZV85J93qEJPBIufwUtDBY8N42UNgja8Z5ObF6IA=="
-  "resolved" "https://registry.npmjs.org/ts-proto/-/ts-proto-1.122.0.tgz"
-  "version" "1.122.0"
+  "integrity" "sha512-ADXnF+Psk3SaLzxtXrhvKUDrNNpg7LnL5rQuQL+u9PiOQ4C2ktWLvJM0VtL4zqQ9/OHROmXjebpR0KMZAkI93w=="
+  "resolved" "https://registry.npmjs.org/ts-proto/-/ts-proto-1.125.0.tgz"
+  "version" "1.125.0"
   dependencies:
     "@types/object-hash" "^1.3.0"
     "dataloader" "^1.4.0"
     "object-hash" "^1.3.1"
     "protobufjs" "^6.11.3"
-    "ts-poet" "^4.15.0"
+    "ts-poet" "^6.1.0"
     "ts-proto-descriptors" "1.7.1"
 
 "tsconfig-paths@^4.1.0":

@@ -30,6 +30,14 @@ let dragOffsetOldY = 0;
 let initialX = 0;
 let initialY = 0;
 
+type pair = {
+	prices?: Array<any>;
+}
+
+type mkt = {
+	pairs?: Array<pair>;
+}
+
 fetch('./rmse4.9.5_TORNBUSD-5m-2022-3-4-to-2022-5-3.csv.pbf')
   .then(res => res.arrayBuffer())
   .then(buff => {
@@ -38,7 +46,7 @@ fetch('./rmse4.9.5_TORNBUSD-5m-2022-3-4-to-2022-5-3.csv.pbf')
     let market = Market.read(pbf, null)
     console.log(market)
 
-    //init();
+    init(market);
 });
 
 let resizeId: number;
@@ -59,7 +67,7 @@ function newFrame(): void {
 
 requestAnimationFrame(newFrame);
 
-function init(): void {
+function init(market: mkt): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
@@ -70,25 +78,46 @@ function init(): void {
 
   wglp.removeAllLines();
 
-  for (let i = 0; i < numLines; i++) {
-    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-    const line = new WebglLine(color, numX);
-    line.lineSpaceX(-1, 2 / numX);
-    wglp.addDataLine(line);
+  if (market === undefined) {
+      return;
   }
 
+  var numLines = market.pairs.length;
+  var numX = market.pairs[0].prices.length;
+
+  console.log(numX);
+
+  for (let i = 0; i < numLines; i++) {
+      const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
+      const line = new WebglLine(color, numX);
+      line.lineSpaceX(-1, 2 / numX);
+      wglp.addDataLine(line);
+  }
+
+  let lineCount = 0;
   wglp.linesData.forEach((line) => {
-    (line as WebglLine).setY(0, Math.random() - 0.5);
-    for (let i = 1; i < line.numPoints; i++) {
-      let y = (line as WebglLine).getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
-      if (y > 0.9) {
-        y = 0.9;
+      //line.setY(-20000, 20000);
+      for (let i = 0; i < line.numPoints; i++) {
+          let p = market.pairs[lineCount].prices[i]
+
+          //line.getY(
+          let y = p;
+
+          if (y > 2000) {
+              y = 2000;
+          }
+          if (y < -2000) {
+              y = -2000;
+          }
+
+	  (line as WebglLine).setY(i, y);
+
+          if (i % 10000 === 0) {
+		console.log(i, p);
+          }
       }
-      if (y < -0.9) {
-        y = -0.9;
-      }
-      (line as WebglLine).setY(i, y);
-    }
+      console.log('linecount', lineCount);
+      lineCount++
   });
 
   // add zoom rectangle
@@ -105,7 +134,8 @@ function init(): void {
   wglp.addLine(testRect);
 
   //wglp.viewport(0, 0, 1000, 1000);
-  wglp.gScaleX = 1;
+  wglp.gScaleX = 1.0;
+  wglp.gScaleY = 0.01;
 
   canvas.addEventListener("touchstart", touchStart);
   canvas.addEventListener("touchmove", touchMove);
@@ -128,7 +158,7 @@ function dblClick(e: MouseEvent) {
   e.preventDefault();
   wglp.gScaleX = 1;
   wglp.gOffsetX = 0;
-  wglp.gScaleY = 1;
+  wglp.gScaleY = 0.01;
   wglp.gOffsetY = 0;
 }
 
