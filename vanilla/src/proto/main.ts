@@ -1,16 +1,14 @@
 import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 import { updateAxisX, updateAxisY } from "./axis.js";
-import Pbf from "pbf";
-import { Market } from "./market";
+import Pbf from "../../node_modules/pbf/dist/pbf.js";
+import { Market } from "./pbfmarket.js";
 
 const numLines = 2;
 
 const canvas = document.getElementById("canvas_plot") as HTMLCanvasElement;
 
 let numX: number;
-
 let wglp: WebglPlot;
-
 let Rect: WebglLine;
 
 let scaleX = 1;
@@ -38,7 +36,8 @@ type mkt = {
 	pairs?: Array<pair>;
 }
 
-fetch('./rmse4.9.5_TORNBUSD-5m-2022-3-4-to-2022-5-3.csv.pbf')
+//fetch('./rmse4.9.5_TORNBUSD-5m-2022-3-4-to-2022-5-3.csv.pbf')
+fetch('./rmse4.9.5_..pbf')
   .then(res => res.arrayBuffer())
   .then(buff => {
 
@@ -65,7 +64,15 @@ function newFrame(): void {
   requestAnimationFrame(newFrame);
 }
 
-requestAnimationFrame(newFrame);
+
+const addGridLine = (coords: Float32Array) => {
+  const color = new ColorRGBA(0.5, 0.5, 0.5, 1);
+  const line = new WebglLine(color, 2);
+  line.xy = coords;
+  wglp.addLine(line);
+};
+
+//requestAnimationFrame(newFrame);
 
 function init(market: mkt): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
@@ -88,7 +95,7 @@ function init(market: mkt): void {
   console.log(numX);
 
   for (let i = 0; i < numLines; i++) {
-      const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
+      const color = new ColorRGBA(0.2, 0.2, 0.2, 0.4);
       const line = new WebglLine(color, numX);
       line.lineSpaceX(-1, 2 / numX);
       wglp.addDataLine(line);
@@ -103,11 +110,11 @@ function init(market: mkt): void {
           //line.getY(
           let y = p;
 
-          if (y > 2000) {
-              y = 2000;
+          if (y > 9000) {
+              y = 9000;
           }
-          if (y < -2000) {
-              y = -2000;
+          if (y < -9000) {
+              y = -9000;
           }
 
 	  (line as WebglLine).setY(i, y);
@@ -133,9 +140,9 @@ function init(market: mkt): void {
   testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
   wglp.addLine(testRect);
 
-  //wglp.viewport(0, 0, 1000, 1000);
-  wglp.gScaleX = 1.0;
-  wglp.gScaleY = 0.01;
+  setScale()
+
+  canvas.addEventListener("wheel", zoomEvent);
 
   canvas.addEventListener("touchstart", touchStart);
   canvas.addEventListener("touchmove", touchMove);
@@ -152,14 +159,19 @@ function init(market: mkt): void {
   //canvas.style.cursor = "zoom-in";
 
   //window.addEventListener("keydown", keyEvent);
+  newFrame()
+}
+
+function setScale() {
+    wglp.gScaleX = 1;
+    wglp.gOffsetX = 0;
+    wglp.gScaleY = 0.0004;
+    wglp.gOffsetY = -1.2;
 }
 
 function dblClick(e: MouseEvent) {
   e.preventDefault();
-  wglp.gScaleX = 1;
-  wglp.gOffsetX = 0;
-  wglp.gScaleY = 0.01;
-  wglp.gOffsetY = 0;
+  setScale()
 }
 
 function contextMenu(e: Event) {
@@ -215,6 +227,32 @@ function mouseMove(e: MouseEvent) {
     wglp.gOffsetY = offsetY + dragOffsetOldY;
   }
 }
+
+function zoomEvent(e: WheelEvent) {
+  e.preventDefault();
+
+  const cursorOffsetX = (-2 * (e.clientX * devicePixelRatio - canvas.width / 2)) / canvas.width;
+
+  if (e.shiftKey) {
+    offsetX += e.deltaY * 0.1;
+    wglp.gOffsetX = 0.1 * offsetX;
+  } else {
+    scaleX += e.deltaY * -0.01;
+    scaleX = Math.min(100, scaleX);
+    scaleX = Math.max(1, scaleX);
+    const gScaleXOld = wglp.gScaleX;
+
+    wglp.gScaleX = 1 * Math.pow(scaleX, 1.5);
+
+    if (scaleX > 1 && scaleX < 100) {
+      wglp.gOffsetX = ((wglp.gOffsetX + cursorOffsetX) * wglp.gScaleX) / gScaleXOld;
+    }
+    if (scaleX <= 1) {
+      wglp.gOffsetX = 0;
+    }
+  }
+}
+
 
 function mouseUp(e: MouseEvent) {
   e.preventDefault();
