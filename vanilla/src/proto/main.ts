@@ -1,10 +1,14 @@
 import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 import { updateAxisX, updateAxisY } from "./axis.js";
+// !! manual imported in proto/custom.html
 import Pbf from "../../node_modules/pbf/dist/pbf.js";
 import { Market } from "./pbfmarket.js";
+// above two lines should be commented out.
+// due to some javascript error.
 
 const numLines = 2;
 
+// the element with the webgl graph plot.
 const canvas = document.getElementById("canvas_plot") as HTMLCanvasElement;
 
 let numX: number;
@@ -25,10 +29,17 @@ let dragOffsetOldX = 0;
 let dragInitialY = 0;
 let dragOffsetOldY = 0;
 
+type lineSetting = {
+	highlight?: boolean;
+}
+
+let lines = new Map<string, lineSetting>();
+
 let initialX = 0;
 let initialY = 0;
 
 type pair = {
+	symbol?: string;
 	prices?: Array<any>;
 }
 
@@ -45,8 +56,21 @@ fetch('./rmse4.9.5_..pbf')
     let market = Market.read(pbf, null)
     console.log(market)
 
+    lineSettings(market);
     init(market);
 });
+
+function lineSettings(market: mkt): void {
+  var numLines = market.pairs.length;
+  let lineCount = 0
+  for (let i = 0; i < numLines; i++) {
+	let ls = {highlight: false};
+	lines[market.pairs[i].symbol] = ls;
+	if (i % 25 === 0) {
+		lines[market.pairs[i].symbol].highlight = true
+	}
+  }
+}
 
 let resizeId: number;
 window.addEventListener("resize", () => {
@@ -72,8 +96,11 @@ const addGridLine = (coords: Float32Array) => {
   wglp.addLine(line);
 };
 
-//requestAnimationFrame(newFrame);
 
+// requestAnimationFrame(newFrame);
+/* setup all the lines by looping over all market data
+ * in pbf file.
+ */
 function init(market: mkt): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
   canvas.width = canvas.clientWidth * devicePixelRatio;
@@ -82,7 +109,6 @@ function init(market: mkt): void {
   numX = 10000;
 
   wglp = new WebglPlot(canvas);
-
   wglp.removeAllLines();
 
   if (market === undefined) {
@@ -92,22 +118,27 @@ function init(market: mkt): void {
   var numLines = market.pairs.length;
   var numX = market.pairs[0].prices.length;
 
-  console.log(numX);
+  let lineCount = 0
+
+  console.log(lines);
 
   for (let i = 0; i < numLines; i++) {
-      const color = new ColorRGBA(0.2, 0.2, 0.2, 0.4);
+      let color = new ColorRGBA(0.2, 0.2, 0.2, 0.4);
+      let color2 = new ColorRGBA(0.8, 0.8, 0.2, 0.8);
+
+
+      // check if symbol is highlighted.
+      let s = market.pairs[i].symbol;
+      if (lines[s].highlight) {
+	      color = color2;
+      }
+
       const line = new WebglLine(color, numX);
       line.lineSpaceX(-1, 2 / numX);
       wglp.addDataLine(line);
-  }
 
-  let lineCount = 0;
-  wglp.linesData.forEach((line) => {
-      //line.setY(-20000, 20000);
-      for (let i = 0; i < line.numPoints; i++) {
-          let p = market.pairs[lineCount].prices[i]
-
-          //line.getY(
+      for (let j = 0; j < line.numPoints; j++) {
+          let p = market.pairs[lineCount].prices[j]
           let y = p;
 
           if (y > 9000) {
@@ -117,43 +148,50 @@ function init(market: mkt): void {
               y = -9000;
           }
 
-	  (line as WebglLine).setY(i, y);
+	  (line as WebglLine).setY(j, y);
 
           if (i % 10000 === 0) {
-		console.log(i, p);
+		console.log(j, p);
           }
       }
-      console.log('linecount', lineCount);
+      //console.log('linecount', lineCount);
       lineCount++
+  };
+  console.log(lines);
+  addGridLine(new Float32Array([-numX, 1000, numX, 1000]));
+
+  /*
+  let c = 0;
+  lines.forEach((l, s) => {
+	c++;
+	l.color = new ColorRGBA(0.9, 0.2, 0.2, 0.4);
+	wglp.addDataLine(l);
   });
+  */
 
   // add zoom rectangle
-  Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), 4);
-  Rect.loop = true;
-  Rect.xy = new Float32Array([-0.5, -1, -0.5, 1, 0.5, 1, 0.5, -1]);
-  Rect.visible = false;
-  wglp.addLine(Rect);
+  // Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), 4);
+  // Rect.loop = true;
+  // Rect.xy = new Float32Array([-0.5, -1, -0.5, 1, 0.5, 1, 0.5, -1]);
+  // Rect.visible = false;
+  // wglp.addLine(Rect);
 
   // test rec
-  const testRect = new WebglLine(new ColorRGBA(0.1, 0.9, 0.9, 1), 4);
-  testRect.loop = true;
-  testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
-  wglp.addLine(testRect);
+  // const testRect = new WebglLine(new ColorRGBA(0.1, 0.9, 0.9, 1), 4);
+  // testRect.loop = true;
+  // testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
+  // wglp.addLine(testRect);
 
   setScale()
 
   canvas.addEventListener("wheel", zoomEvent);
-
   canvas.addEventListener("touchstart", touchStart);
   canvas.addEventListener("touchmove", touchMove);
   canvas.addEventListener("touchend", touchEnd);
-
   canvas.addEventListener("mousedown", mouseDown);
   canvas.addEventListener("mousemove", mouseMove);
   canvas.addEventListener("mouseup", mouseUp);
-
   canvas.addEventListener("dblclick", dblClick);
-
   canvas.addEventListener("contextmenu", contextMenu);
 
   //canvas.style.cursor = "zoom-in";
